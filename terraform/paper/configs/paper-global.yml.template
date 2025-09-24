@@ -1,0 +1,10 @@
+proxies:
+  velocity:
+    enabled: true
+    online-mode: false
+    secret: ${FORWARDING_SECRET}
+    support-flattening: true
+
+settings:
+  bungeecord: false
+prevent-proxy-connections: false
