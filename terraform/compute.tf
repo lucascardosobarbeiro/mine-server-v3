@@ -17,7 +17,7 @@ resource "google_compute_address" "static_ip" {
 # Cria a instância da máquina virtual.
 resource "google_compute_instance" "minecraft_server_host" {
   name         = "minecraft-server-host"
-  machine_type = "custom-4-18432"
+  machine_type = "e2-standard-4" # 4 vCPUs, 16 GB RAM
   zone         = var.zone
   tags         = ["minecraft-server"]
 
