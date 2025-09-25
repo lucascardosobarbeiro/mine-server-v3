@@ -4,7 +4,7 @@ networks:
 
 services:
   mc-sobrevivencia:
-    image: itzg/minecraft-server:latest
+    image: itzg/minecraft-server
     container_name: mc-sobrevivencia
     restart: unless-stopped
     ports:
@@ -26,6 +26,7 @@ services:
       ONLINE_MODE: "false"
       VELOCITY_ENABLED: "true"
       VELOCITY_SECRET_FILE: "/config/forwarding.secret"
+      VERSION: "1.21.9-rc1"
 
     networks:
       - minecraft-net
@@ -33,7 +34,7 @@ services:
       - velocity-proxy
 
   velocity-proxy:
-    image: itzg/mc-proxy:latest
+    image: itzg/mc-proxy
     container_name: velocity-proxy
     restart: unless-stopped
     ports:
