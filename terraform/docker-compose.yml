@@ -1,5 +1,3 @@
-version: "3.8"
-
 networks:
   minecraft-net:
     driver: bridge
@@ -22,11 +20,11 @@ services:
       - ./paper/plugins:/data/plugins
 
     environment:
-      EULA:               "TRUE"
-      TYPE:               "PAPER"
-      MEMORY:             "10G"
-      ONLINE_MODE:        "false"
-      VELOCITY_ENABLED:   "true"
+      EULA: "TRUE"
+      TYPE: "PAPER"
+      MEMORY: "10G"
+      ONLINE_MODE: "false"
+      VELOCITY_ENABLED: "true"
       VELOCITY_SECRET_FILE: "/config/forwarding.secret"
 
     networks:
@@ -48,7 +46,7 @@ services:
       - ./velocity/plugins:/config/plugins
 
     environment:
-      TYPE:   "VELOCITY"
+      TYPE: "VELOCITY"
       MEMORY: "1G"
     networks:
       - minecraft-net

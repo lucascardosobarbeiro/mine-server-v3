@@ -89,3 +89,5 @@ resource "google_service_account_iam_member" "github_wif_user" {
   role               = "roles/iam.workloadIdentityUser"
   member             = "principalSet://iam.googleapis.com/${google_iam_workload_identity_pool.github_pool.name}/attribute.repository/${var.github_repo}"
 }
+
+
