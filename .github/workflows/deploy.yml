@@ -82,7 +82,7 @@ jobs:
             --zone ${{ env.GCP_ZONE }} \
             --project ${{ env.GCP_PROJECT_ID }} \
             --tunnel-through-iap --command="
-              # 1. Limpa diretórios antigos
+              # 1. Limpa diretórios antigos (mantém a segurança)
               sudo rm -rf /mnt/data/minecraft/velocity \
                            /mnt/data/minecraft/paper/configs \
                            /mnt/data/minecraft/paper/plugins \
@@ -96,18 +96,24 @@ jobs:
               sudo mv ~/deploy/plugins/* /mnt/data/minecraft/paper/plugins/ && \
               sudo mv ~/deploy/monitoring         /mnt/data/minecraft/monitoring && \
               
-              # 3. CORREÇÃO DE PERMISSÃO DEFINITIVA: 
-              # A) Garante que a pasta Grafana e seus dados tenham permissão universal (777).
+              # 3. CRIAÇÃO FORÇADA DA ESTRUTURA DE DADOS VAZIOS: 
+              # Garante que os caminhos de volume do Docker existam no host antes do compose up.
+              sudo mkdir -p /mnt/data/minecraft/monitoring/grafana \
+                             /mnt/data/minecraft/monitoring/prometheus/data \
+                             /mnt/data/minecraft/monitoring/loki/data && \
+              
+              # 4. CORREÇÃO DE PERMISSÃO FINAL: 
+              # A) Permissão universal (777) para Grafana (resolve o erro de escrita).
               sudo chmod -R 777 /mnt/data/minecraft/monitoring/grafana && \
-              # B) Muda o proprietário da pasta de monitoramento para o ID do usuário do Grafana (472).
+              # B) Muda o proprietário da pasta de dados do Grafana.
               sudo chown -R 472:472 /mnt/data/minecraft/monitoring/grafana && \
               
-              # 4. Garante permissões gerais de leitura/escrita para outros serviços
+              # 5. Garante permissões gerais de leitura/escrita para outros serviços
               sudo chmod -R a+rwX /mnt/data/minecraft/velocity && \
               sudo chmod -R a+rwX /mnt/data/minecraft/paper/plugins && \
               sudo chmod -R a+rwX /mnt/data/minecraft/monitoring && \
               
-              # 5. Inicia os containers
+              # 6. Inicia os containers
               cd /mnt/data/minecraft && \
               sudo docker compose down || true && \
               sudo docker compose up -d
