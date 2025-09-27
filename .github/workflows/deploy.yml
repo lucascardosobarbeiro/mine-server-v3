@@ -70,7 +70,7 @@ jobs:
             terraform/velocity \
             terraform/paper/configs \
             terraform/paper/plugins \
-            terraform/monitoring \ 
+            terraform/monitoring \
             ${{ env.INSTANCE_NAME }}:~/deploy/ \
             --zone=${{ env.GCP_ZONE }} \
             --project=${{ env.GCP_PROJECT_ID }} \
