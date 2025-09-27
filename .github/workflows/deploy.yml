@@ -96,15 +96,18 @@ jobs:
               sudo mv ~/deploy/plugins/* /mnt/data/minecraft/paper/plugins/ && \
               sudo mv ~/deploy/monitoring         /mnt/data/minecraft/monitoring && \
               
-              # 3. CORREÇÃO DE PERMISSÃO: Muda o proprietário da pasta de monitoramento para o ID do usuário do Grafana (472)
+              # 3. CORREÇÃO DE PERMISSÃO: Garante que a pasta do Grafana tenha permissão de escrita total
+              sudo chmod -R a+rwX /mnt/data/minecraft/monitoring && \
+              sudo chmod -R 777 /mnt/data/minecraft/monitoring/grafana && \
+              
+              # 4. Muda o proprietário da pasta de monitoramento para o ID do usuário do Grafana (472)
               sudo chown -R 472:472 /mnt/data/minecraft/monitoring && \
               
-              # 4. Garante permissões gerais de leitura/escrita para o Docker
+              # 5. Garante permissões gerais de leitura/escrita para o Docker
               sudo chmod -R a+rwX /mnt/data/minecraft/velocity && \
               sudo chmod -R a+rwX /mnt/data/minecraft/paper/plugins && \
-              sudo chmod -R a+rwX /mnt/data/minecraft/monitoring && \
               
-              # 5. Inicia os containers
+              # 6. Inicia os containers
               cd /mnt/data/minecraft && \
               sudo docker compose down || true && \
               sudo docker compose up -d
