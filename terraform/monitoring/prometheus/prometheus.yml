@@ -12,7 +12,7 @@ scrape_configs:
     static_configs:
       - targets: ['cadvisor:8080']
 
-  # 3. Métricas do Próprio Prometheus
+  # 3. Métricas do Próprio Prometheus (Saúde do Monitoramento)
   - job_name: 'prometheus'
     static_configs:
       - targets: ['prometheus:9090']
