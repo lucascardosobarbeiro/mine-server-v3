@@ -1,0 +1,18 @@
+global:
+  scrape_interval: 15s # Frequência para coletar métricas
+
+scrape_configs:
+  # 1. Métricas do Sistema Operacional da VM (CPU, RAM, Disco)
+  - job_name: 'node_exporter'
+    static_configs:
+      - targets: ['node-exporter:9100']
+
+  # 2. Métricas dos Contêineres (Uso de CPU/RAM por container Docker)
+  - job_name: 'cadvisor'
+    static_configs:
+      - targets: ['cadvisor:8080']
+
+  # 3. Métricas do Próprio Prometheus
+  - job_name: 'prometheus'
+    static_configs:
+      - targets: ['prometheus:9090']

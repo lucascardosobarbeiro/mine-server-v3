@@ -1,0 +1,27 @@
+auth_enabled: false
+
+server:
+  http_listen_port: 3100
+
+common:
+  # Configuração de armazenamento de dados
+  path_prefix: /data/loki
+  storage:
+    filesystem:
+      directory: /data/loki/chunks # Onde os logs serão armazenados
+  replication_factor: 1
+  ring:
+    instance_addr: 127.0.0.1
+    kvstore:
+      store: inmemory
+    replication_factor: 1
+
+schema_config:
+  configs:
+    - from: 2020-10-24
+      store: boltdb
+      object_store: filesystem
+      schema: v11
+      index:
+        prefix: index_
+        period: 24h

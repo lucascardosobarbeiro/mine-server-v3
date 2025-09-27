@@ -84,14 +84,17 @@ jobs:
             --tunnel-through-iap --command="
               sudo rm -rf /mnt/data/minecraft/velocity \
                            /mnt/data/minecraft/paper/configs \
-                           /mnt/data/minecraft/paper/plugins && \
+                           /mnt/data/minecraft/paper/plugins \
+                           /mnt/data/minecraft/monitoring && \
               sudo mkdir -p /mnt/data/minecraft/paper/plugins && \
               sudo mv ~/deploy/docker-compose.yml /mnt/data/minecraft/docker-compose.yml && \
-              sudo mv ~/deploy/velocity       /mnt/data/minecraft/velocity && \
-              sudo mv ~/deploy/configs        /mnt/data/minecraft/paper/configs && \
-              sudo mv ~/deploy/plugins/*      /mnt/data/minecraft/paper/plugins/ && \
+              sudo mv ~/deploy/velocity           /mnt/data/minecraft/velocity && \
+              sudo mv ~/deploy/configs            /mnt/data/minecraft/paper/configs && \
+              sudo mv ~/deploy/plugins/* /mnt/data/minecraft/paper/plugins/ && \
+              sudo mv ~/deploy/monitoring         /mnt/data/minecraft/monitoring && \
               sudo chmod -R a+rwX /mnt/data/minecraft/velocity && \
               sudo chmod -R a+rwX /mnt/data/minecraft/paper/plugins && \
+              sudo chmod -R a+rwX /mnt/data/minecraft/monitoring && \
               cd /mnt/data/minecraft && \
               sudo docker compose down || true && \
               sudo docker compose up -d
