@@ -33,8 +33,8 @@ resource "google_compute_firewall" "allow_velocity_proxy" {
 
   # 'allow' define o que é permitido.
   allow {
-    protocol = "tcp"         # Protocolo de comunicação do Minecraft.
-    ports    = ["25565"]     # A única porta que os jogadores usarão.
+    protocol = "tcp"     # Protocolo de comunicação do Minecraft.
+    ports    = ["25565"] # A única porta que os jogadores usarão.
   }
   # 'source_ranges' define de onde o tráfego pode vir.
   # "0.0.0.0/0" é um CIDR especial que significa "qualquer lugar da internet".
@@ -58,4 +58,22 @@ resource "google_compute_firewall" "allow_iap_ssh" {
   # pode sequer tentar se conectar à porta 22.
   source_ranges = ["35.235.240.0/20"]
   target_tags   = ["minecraft-server"]
+}
+
+# Regra 3: Permite o acesso à interface do Grafana (porta 3000).
+resource "google_compute_firewall" "allow_grafana" {
+  name    = "allow-grafana-tcp-3000"
+  network = google_compute_network.minecraft_vpc.self_link
+
+  # 'allow' define o que é permitido.
+  allow {
+    protocol = "tcp"
+    ports    = ["3000"] # <--- PORTA CORRETA: 3000 (Grafana)
+  }
+
+  # 'source_ranges': Permite acesso de qualquer lugar da internet
+  source_ranges = ["0.0.0.0/0"]
+
+  # 'target_tags': Aplica-se à sua VM, que tem a tag "minecraft-server"
+  target_tags = ["minecraft-server"]
 }
