@@ -6,10 +6,10 @@ on:
       - main
 
 env:
-  GCP_PROJECT_ID:        ${{ secrets.GCP_PROJECT_ID }}
-  GCP_ZONE:              ${{ secrets.GCP_ZONE }}
-  INSTANCE_NAME:         ${{ secrets.INSTANCE_NAME }}
-  FORWARDING_SECRET:     ${{ secrets.FORWARDING_SECRET }}
+  GCP_PROJECT_ID: ${{ secrets.GCP_PROJECT_ID }}
+  GCP_ZONE: ${{ secrets.GCP_ZONE }}
+  INSTANCE_NAME: ${{ secrets.INSTANCE_NAME }}
+  FORWARDING_SECRET: ${{ secrets.FORWARDING_SECRET }}
   FORWARDING_SECRET_FILE: "/config/forwarding.secret"
 
 jobs:
@@ -35,7 +35,7 @@ jobs:
         with:
           token_format: access_token
           workload_identity_provider: ${{ secrets.GCP_WORKLOAD_IDENTITY_PROVIDER }}
-          service_account:        ${{ secrets.GCP_SERVICE_ACCOUNT }}
+          service_account: ${{ secrets.GCP_SERVICE_ACCOUNT }}
 
       - name: Generate forwarding.secret from template
         run: |
@@ -70,6 +70,7 @@ jobs:
             terraform/velocity \
             terraform/paper/configs \
             terraform/paper/plugins \
+            terraform/monitoring \ 
             ${{ env.INSTANCE_NAME }}:~/deploy/ \
             --zone=${{ env.GCP_ZONE }} \
             --project=${{ env.GCP_PROJECT_ID }} \
