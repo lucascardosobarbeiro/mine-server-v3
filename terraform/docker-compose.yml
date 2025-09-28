@@ -12,13 +12,11 @@ services:
     ports:
       - "25566:25565"
     volumes:
-      # mundo + dados persistentes
-      - ./sobrevivencia-data:/data
-
-      # pasta única de configs (server.properties, paper-global.yml, spigot.yml, forwarding.secret)
+      # Dados do mundo: Usa Volume Nomeado para persistir o mundo
+      - minecraft_data:/data
+      # Pasta de configs (Bind Mount para a Pipeline)
       - ./paper/configs:/config
-
-      # plugins baixados pelo CI (agora com permissão de escrita pra .paper-remapped)
+      # Plugins (Bind Mount para a Pipeline)
       - ./paper/plugins:/data/plugins
 
     environment:
@@ -28,8 +26,7 @@ services:
       ONLINE_MODE: "false"
       VELOCITY_ENABLED: "true"
       VELOCITY_SECRET_FILE: "/config/forwarding.secret"
-      VERSION: "1.21.8"
-
+      VERSION: "1.21.9-rc1" # Versão fixada
     networks:
       - minecraft-net
       - monitoring
@@ -37,18 +34,16 @@ services:
       - velocity-proxy
 
   velocity-proxy:
-    image: itzg/mc-proxy
+    image: itzg/mc-proxy:latest
     container_name: velocity-proxy
     restart: unless-stopped
     ports:
       - "25565:25577"
     volumes:
-      # configs e secret do proxy
+      # configs e secret do proxy (Bind Mount para a Pipeline)
       - ./velocity:/config
-
-      # plugins do proxy (se usar)
+      # plugins do proxy (Bind Mount para a Pipeline)
       - ./velocity/plugins:/config/plugins
-
     environment:
       TYPE: "VELOCITY"
       MEMORY: "1G"
@@ -56,7 +51,10 @@ services:
       - minecraft-net
       - monitoring
 
-      # MONITORING
+  # ==================================
+  # SERVIÇOS DE MONITORAMENTO E LOGS
+  # ==================================
+
   prometheus:
     image: prom/prometheus:v2.45.0
     container_name: prometheus
@@ -64,7 +62,7 @@ services:
     command: --config.file=/etc/prometheus/prometheus.yml
     volumes:
       - ./monitoring/prometheus/prometheus.yml:/etc/prometheus/prometheus.yml
-      - ./monitoring/prometheus/data:/prometheus # Persistência de dados
+      - prometheus_data:/prometheus # Volume Nomeado
     ports:
       - "9090:9090"
     networks:
@@ -75,7 +73,7 @@ services:
     container_name: grafana
     restart: unless-stopped
     volumes:
-      - ./monitoring/grafana:/var/lib/grafana # Persistência de dashboards
+      - grafana_data:/var/lib/grafana # Volume Nomeado para dashboards e login
     ports:
       - "3000:3000"
     networks:
@@ -83,6 +81,16 @@ services:
     depends_on:
       - prometheus
       - loki
+    environment:
+      # CONFIGURAÇÃO SMTP para alertas de e-mail (Substituir com credenciais reais)
+      GF_SMTP_ENABLED: "true"
+      GF_SMTP_HOST: "smtp.gmail.com:587"
+      GF_SMTP_USER: "SEU_EMAIL_AQUI@gmail.com"
+      GF_SMTP_PASSWORD: "SUA_SENHA_DE_APP_DE_16_CARACTERES"
+      GF_SMTP_FROM_ADDRESS: "SEU_EMAIL_AQUI@gmail.com"
+      GF_SMTP_SKIP_VERIFY: "false"
+      GF_SMTP_STARTTLS_POLICY: "VerifyStartTLS"
+      GF_SMTP_FROM_NAME: "Servidor Minecraft Alertas"
 
   loki:
     image: grafana/loki:latest
@@ -90,7 +98,7 @@ services:
     restart: unless-stopped
     volumes:
       - ./monitoring/loki/config.yml:/etc/loki/config.yml
-      - ./monitoring/loki/data:/data # Persistência de logs
+      - loki_data:/data # Volume Nomeado
     ports:
       - "3100:3100"
     networks:
@@ -100,9 +108,9 @@ services:
     image: grafana/promtail:latest
     container_name: promtail
     restart: unless-stopped
+    user: root
     command: -config.file=/etc/promtail/config.yml
     volumes:
-      # Monta diretórios essenciais para ler logs e o socket Docker
       - /var/lib/docker/containers:/var/lib/docker/containers:ro
       - /var/run/docker.sock:/var/run/docker.sock:ro
       - ./monitoring/promtail/config.yml:/etc/promtail/config.yml
@@ -132,7 +140,6 @@ services:
     command:
       - "--path.rootfs=/host"
     volumes:
-      # Expõe o sistema operacional da VM para coletar métricas do host
       - /proc:/host/proc:ro
       - /sys:/host/sys:ro
       - /:/host:ro,rslave
@@ -140,3 +147,13 @@ services:
       - "9100:9100"
     networks:
       - monitoring
+
+# ==================================
+# BLOCO DE DEFINIÇÃO DE VOLUMES PERSISTENTES
+# Garante que dados e configs sobrevivam a DOWNs e reinícios.
+# ==================================
+volumes:
+  minecraft_data:
+  grafana_data:
+  prometheus_data:
+  loki_data:
