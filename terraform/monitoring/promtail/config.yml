@@ -3,29 +3,28 @@ server:
   grpc_listen_port: 0
 
 positions:
-  filename: /tmp/positions.yml # Onde o Promtail armazena o que já leu
+  filename: /tmp/positions.yml
 
 clients:
-  - url: http://loki:3100/loki/api/v1/push # Endereço do serviço Loki
+  - url: http://loki:3100/loki/api/v1/push
 
 scrape_configs:
 - job_name: container_logs
-  # Usa a descoberta de serviço do Docker para encontrar contêineres
+  # Removido o bloco 'filters' para garantir que o Promtail colete tudo
   docker_sd_configs:
   - host: unix:///var/run/docker.sock
     refresh_interval: 5s
-    # Filtra APENAS os logs do Minecraft e do proxy
-    filters:
-      - name: container_name
-        values:
-          - mc-sobrevivencia
-          - velocity-proxy
 
   relabel_configs:
-    # Atribui o nome do contêiner como um rótulo no log para facilitar a busca no Grafana
+    # Captura o nome do contêiner (ex: /mc-sobrevivencia) e salva como rótulo 'container'
     - source_labels: ['__meta_docker_container_name']
       regex: '/(.*)'
-      target_label: 'container_name'
-    # Atribui o nome do serviço docker-compose como um rótulo
+      target_label: 'container'
+      
+    # Captura o nome do serviço docker-compose (ex: mc-sobrevivencia) e salva como rótulo 'compose_service'
     - source_labels: ['__meta_docker_container_label_com_docker_compose_service']
       target_label: 'compose_service'
+      
+    # Captura o ID do contêiner (útil para debug)
+    - source_labels: ['__meta_docker_container_id']
+      target_label: 'instance'
