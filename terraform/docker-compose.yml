@@ -37,6 +37,7 @@ services:
     image: itzg/mc-proxy:latest
     container_name: velocity-proxy
     restart: unless-stopped
+
     ports:
       - "25565:25577"
     volumes:
@@ -47,6 +48,7 @@ services:
     environment:
       TYPE: "VELOCITY"
       MEMORY: "1G"
+      VERSION: "3.4.0" # Versão fixada
     networks:
       - minecraft-net
       - monitoring
