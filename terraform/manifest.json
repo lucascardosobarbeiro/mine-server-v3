@@ -2,11 +2,11 @@
   "paper": [
     {
       "name": "ViaVersion-5.4.2",
-      "url": "https://hangarcdn.papermc.io/plugins/ViaVersion/ViaVersion/versions/5.4.2/PAPER/ViaVersion-5.4.2.jar"
+      "url": "https://hangarcdn.papermc.io/plugins/ViaVersion/ViaVersion/versions/5.5.1/PAPER/ViaVersion-5.4.2.jar"
     },
     {
       "name": "ViaBackwards-5.4.2",
-      "url": "https://hangarcdn.papermc.io/plugins/ViaVersion/ViaBackwards/versions/5.4.2/PAPER/ViaBackwards-5.4.2.jar"
+      "url": "https://hangarcdn.papermc.io/plugins/ViaVersion/ViaBackwards/versions/5.5.1/PAPER/ViaBackwards-5.4.2.jar"
     },
     {
       "name": "Chunky-1.4.40",
@@ -20,11 +20,11 @@
   "velocity": [
     {
       "name": "ViaVersion-5.4.2",
-      "url": "https://hangarcdn.papermc.io/plugins/ViaVersion/ViaVersion/versions/5.4.2/PAPER/ViaVersion-5.4.2.jar"
+      "url": "https://hangarcdn.papermc.io/plugins/ViaVersion/ViaVersion/versions/5.5.1/VELOCITY/ViaVersion-5.5.1.jar"
     },
     {
       "name": "ViaBackwards-5.4.2",
-      "url": "https://hangarcdn.papermc.io/plugins/ViaVersion/ViaBackwards/versions/5.4.2/PAPER/ViaBackwards-5.4.2.jar"
+      "url": "https://hangarcdn.papermc.io/plugins/ViaVersion/ViaBackwards/versions/5.5.1/VELOCITY/ViaBackwards-5.5.1.jar"
     }
   ]
 }

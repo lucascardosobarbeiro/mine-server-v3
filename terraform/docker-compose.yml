@@ -26,7 +26,7 @@ services:
       ONLINE_MODE: "false"
       VELOCITY_ENABLED: "true"
       VELOCITY_SECRET_FILE: "/config/forwarding.secret"
-      VERSION: "1.21.8" # Versão fixada
+      VERSION: "1.21.10" # Versão fixada
     networks:
       - minecraft-net
       - monitoring
