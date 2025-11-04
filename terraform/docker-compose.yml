@@ -48,7 +48,7 @@ services:
     environment:
       TYPE: "VELOCITY"
       MEMORY: "1G"
-      VERSION: "1.7.2" # Versão fixada
+      VERSION: "3.3.0"
     networks:
       - minecraft-net
       - monitoring
